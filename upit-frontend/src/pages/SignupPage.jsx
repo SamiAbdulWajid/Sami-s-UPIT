@@ -34,7 +34,7 @@ export function SignupPage() {
   const handleonSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/users/signup", {
+      const res = await axios.post("https://sami-s-upit-backend.onrender.com/users/signup", {
         username,
         email,
         password,
