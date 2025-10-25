@@ -19,7 +19,7 @@ export function EditProject() {
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/projects/${_id}`)
+    fetch(`https://sami-s-upit-backend.onrender.com/projects/${_id}`)
       .then((res) => res.json())
       .then((data) => {
         setProjectName(data.name);
@@ -126,7 +126,7 @@ export function EditProject() {
   };
 
   try {
-    const res = await fetch(`https://sami-s-upit-backend.onrender.com`, {
+    const res = await fetch(`https://sami-s-upit-backend.onrender.com/projects/${_id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
