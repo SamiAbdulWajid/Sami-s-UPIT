@@ -11,7 +11,7 @@ export function ViewPage() {
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/projects/${id}`)
+    axios.get(`https://sami-s-upit-backend.onrender.com/projects/${id}`)
       .then(res => {
         setProject(res.data);
         if (res.data.files && res.data.files.length > 0) {
