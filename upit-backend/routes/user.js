@@ -1,105 +1,3 @@
-// const express = require("express");
-// const router = express.Router({ mergeParams: true });
-// const User = require("../models/User");
-// const Project = require("../models/Project");
-// const passport = require("passport");
-// const wrapAsync = require("../utils/wrapAsync");
-// const ExpressError = require("../utils/ExpressError.js");
-// // Create a new User
-// router.post("/signup", wrapAsync(async (req, res) => {
-//     try {
-//         const { username, email, password } = req.body;
-//         if (!username || !email || !password) {
-//             return res.status(400).json({ message: "All fields are required" });
-//         }
-//         // Use email as username for passport-local-mongoose
-//         const user = new User({ username, email });
-//         const registeredUser = await User.register(user, password);
-//         res.status(201).json({ message: "User registered successfully", user: registeredUser });
-//     } catch (err) {
-//         res.status(400).json({ message: err.message });
-//     }
-// }));
-
-// //Deleting User
-// router.delete("/:_id", wrapAsync(async (req, res, next) => {
-//     try {
-//         const { _id } = req.params;
-//         // Delete all projects where this user is the creator
-//         await Project.deleteMany({ creator: _id });
-//         const deletingUser = await User.findByIdAndDelete(_id);
-//         if (!deletingUser) throw new ExpressError(404, "User not found");
-//         req.logout(function(err) {
-//             if (err) {
-//                 console.error("Logout error after delete:", err);
-//                 return next(err);
-//             }
-//             return res.json({ message: "User deleted and logged out" });
-//         });
-//     } catch (err) {
-//         console.error("Delete user error:", err);
-//         return res.status(500).json({ error: err.message || err });
-//     }
-// }))
-
-// // // Login
-// // router.post("/login", passport.authenticate("local",{
-// //   failureRedirect:"/login",
-// //   failureFlash:true,
-// // }),
-// // async (req,res)=>{
-// //   res.send("Welcome back old Friend");
-// // });
-
-// // // Logout 
-// // router.get("/logout",(req,res)=>{
-// //   req.logout((err) =>{
-// //     if(err) {
-// //       return next(err);
-// //     }
-// //      console.log("user successfully logged out :)")
-// //   })
-// // })
-
-// // Login Route
-// router.post("/login", (req, res, next) => {
-//   passport.authenticate("local", (err, user, info) => {
-//     if (err) return next(err);
-
-//     if (!user) {
-//       // Instead of connect-flash, send JSON error
-//       return res.status(401).json({ message: "Invalid email or password" });
-//     }
-
-//     req.login(user, (err) => {
-//       if (err) return next(err);
-//       // Send JSON success message
-//       return res.json({ message: "Welcome back old Friend", user });
-//     });
-//   })(req, res, next);
-// });
-
-// // Logout Route
-// router.get("/logout", (req, res, next) => {
-//   req.logout((err) => {
-//     if (err) return next(err);
-//     console.log("User successfully logged out :)");
-//     return res.json({ message: "User successfully logged out" });
-//   });
-// });
-
-// // Check if user is logged in or not 
-// router.get("/checkAuth", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     return res.json({ isAuthenticated: true, user: req.user });
-//   }
-//   res.json({ isAuthenticated: false });
-// });
-
-
-
-// module.exports = router;
-
 
 const express = require("express");
 const router = express.Router({ mergeParams: true });
@@ -177,6 +75,21 @@ router.delete("/:_id", wrapAsync(async (req, res, next) => {
 }));
 
 // Login Route
+// router.post("/login", (req, res, next) => {
+//   passport.authenticate("local", (err, user, info) => {
+//     if (err) return next(err);
+
+//     if (!user) {
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     req.login(user, (err) => {
+//       if (err) return next(err);
+//       return res.json({ message: "Welcome back old Friend", user });
+//     });
+//   })(req, res, next);
+// });
+
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
@@ -187,7 +100,10 @@ router.post("/login", (req, res, next) => {
 
     req.login(user, (err) => {
       if (err) return next(err);
-      return res.json({ message: "Welcome back old Friend", user });
+      // Ensure session is saved before sending response
+      req.session.save(() => {
+        return res.json({ message: "Welcome back old Friend", user });
+      });
     });
   })(req, res, next);
 });
