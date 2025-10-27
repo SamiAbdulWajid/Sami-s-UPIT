@@ -11,11 +11,12 @@ export function LeftBox({ setSelectedProject, selectedProject }) {
   const [projects, setProjects] = useState([]);
   const [isAuthenticated, SetisAuthenticated] = useState(false);
   const navigate = useNavigate();
+const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
   const checkAuthAndFetchProjects = async () => {
     try {
-      const res = await fetch("http://localhost:8080/users/checkAuth", {
+      const res = await fetch(`${API_URL}/users/checkAuth`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -23,7 +24,7 @@ export function LeftBox({ setSelectedProject, selectedProject }) {
 
       if (data.isAuthenticated) {
         // Only fetch projects if authenticated
-        const projectsRes = await fetch("http://localhost:8080/projects/my-projects", {
+        const projectsRes = await fetch(`${API_URL}/projects/my-projects`, {
           credentials: "include"
         });
         const projectsData = await projectsRes.json();
@@ -44,7 +45,7 @@ export function LeftBox({ setSelectedProject, selectedProject }) {
  const goToDeleteUser = async () => {
 
   try {
-    const res = await fetch("http://localhost:8080/users/checkAuth", {
+    const res = await fetch(`${API_URL}/users/checkAuth`, {
       credentials: "include",
     });
     const data = await res.json();
@@ -53,8 +54,6 @@ export function LeftBox({ setSelectedProject, selectedProject }) {
       return toast.error("You must be logged in to delete your account.");
     }
 
-    // const confirmDelete=window.confirm(`Do you want to delete this account with username ${data.user.username} ?`);
-    // if(!confirmDelete) return;
 
      const result = await Swal.fire({
       title: "Confirm Deletion",
@@ -71,7 +70,7 @@ export function LeftBox({ setSelectedProject, selectedProject }) {
     if (!result.isConfirmed) return;
 
     // Delete user (this also logs out the user in backend)
-    await axios.delete(`http://localhost:8080/users/${data.user._id}`, {
+    await axios.delete(`${API_URL}/users/${data.user._id}`, {
       withCredentials: true,
     });
 
@@ -85,7 +84,7 @@ export function LeftBox({ setSelectedProject, selectedProject }) {
 
   const goToAddProject = async () => {
     try {
-      const res = await fetch("http://localhost:8080/users/checkAuth", {
+      const res = await fetch(`${API_URL}/users/checkAuth`, {
         credentials: "include"
       });
       const data = await res.json();

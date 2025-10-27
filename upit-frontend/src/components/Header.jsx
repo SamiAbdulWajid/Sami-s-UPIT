@@ -11,10 +11,10 @@ function Header({theme,setTheme}) {
   const [user, setUser] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const navigate = useNavigate();
-
+const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     axios
-      .get("http://localhost:8080/users/checkAuth", { withCredentials: true })
+      .get(`${API_URL}/users/checkAuth`, { withCredentials: true })
       .then((res) => {
         setIsAuthenticated(res.data.isAuthenticated);
         setUser(res.data.user || null);
@@ -27,7 +27,7 @@ function Header({theme,setTheme}) {
 
   const handleLogout = () => {
     axios
-      .get("http://localhost:8080/users/logout", { withCredentials: true })
+      .get(`${API_URL}/users/logout`, { withCredentials: true })
       .then(() => {
         setIsAuthenticated(false);
         setUser(null);

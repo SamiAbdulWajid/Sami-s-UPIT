@@ -51,9 +51,18 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // ================== MIDDLEWARE ================== //
 
+// app.use(cors({
+//   origin: "http://localhost:5173",
+//     // <-- your React/Vite dev server
+//   credentials: true                // <-- allow cookies to be sent
+// }));
+
 app.use(cors({
-  origin: "http://localhost:5173", // <-- your React/Vite dev server
-  credentials: true                // <-- allow cookies to be sent
+  origin: [
+    "http://localhost:5173", // for local development
+    "https://your-frontend.onrender.com" // for deployed frontend
+  ],
+  credentials: true
 }));
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));

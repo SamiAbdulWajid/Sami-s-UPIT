@@ -167,21 +167,6 @@ export function EditProject() {
   }
 };
 
-  // const handleDelete = () => {
-  //   fetch(`http://localhost:8080/projects/${_id}`, {
-  //     method: "DELETE",
-  //     credentials: "include",
-  //   })
-  //     .then(() => {
-  //       toast.success("Project deleted successfully!");
-  //       navigate("/");
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Error deleting project", err);
-  //       console.error("Error deleting project:", err)
-  //     });
-  // };
-
 const handleDelete = () => {
   Swal.fire({
     title: 'Confirm Deletion',
