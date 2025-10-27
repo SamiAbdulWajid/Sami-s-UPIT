@@ -20,7 +20,7 @@ export function SearchProject() {
 
   const fetchProjects = async (query = "") => {
   try {
-    const res = await axios.get("http://localhost:8080/projects/searchProject", {
+    const res = await axios.get("https://sami-s-upit-backend.onrender.com/projects/searchProject", {
       params: { name: query },
     });
     // Always set projects as an array!

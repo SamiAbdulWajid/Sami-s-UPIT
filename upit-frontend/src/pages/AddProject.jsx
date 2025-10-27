@@ -99,7 +99,7 @@ export function AddProject() {
     files.forEach((file) => formData.append("files", file));
 
     try {
-      const res = await axios.post("http://localhost:8080/projects", formData, {
+      const res = await axios.post("https://sami-s-upit-backend.onrender.com/projects", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });

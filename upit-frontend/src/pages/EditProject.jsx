@@ -1,4 +1,9 @@
+
 import Swal from 'sweetalert2';
+
+
+
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,7 +23,7 @@ export function EditProject() {
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/projects/${_id}`)
+    fetch(`https://sami-s-upit-backend.onrender.com/projects/${_id}`)
       .then((res) => res.json())
       .then((data) => {
         setProjectName(data.name);
@@ -139,7 +144,7 @@ export function EditProject() {
   };
 
   try {
-    const res = await fetch(`http://localhost:8080/projects/${_id}`, {
+    const res = await fetch(`https://sami-s-upit-backend.onrender.com/projects/${_id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
