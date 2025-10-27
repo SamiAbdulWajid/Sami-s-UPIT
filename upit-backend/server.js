@@ -45,6 +45,7 @@ const sessionOptions = {
 }
 
 const app = express();
+app.set('trust proxy', 1);
 const port = process.env.PORT || 8080;
 
 // ================== MONGODB CONNECTION ================== //
