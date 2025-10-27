@@ -40,7 +40,7 @@ const sessionOptions = {
     httpOnly:true,
      sameSite: "none",   // <--- add this
     secure: true,
-     domain: ".onrender.com"  
+    
   }
 }
 
