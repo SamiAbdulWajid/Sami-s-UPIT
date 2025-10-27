@@ -266,10 +266,7 @@ padding-bottom: 10px !important;
   /* additional styling if needed */
 }
 
-.viewBtn{
-  margin-top: 10px;
-}
 
-.projectName{
-  margin-top: 10px;
+.viewBtn{
+  margin-top: 10px !important;
 }

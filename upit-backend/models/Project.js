@@ -45,13 +45,6 @@ const projectSchema = new mongoose.Schema({
     required: true
   },
 
-//   participants: [
-//     {
-// type: String,
-//   required: true
-//     }
-//       ],
-
 participants: [
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

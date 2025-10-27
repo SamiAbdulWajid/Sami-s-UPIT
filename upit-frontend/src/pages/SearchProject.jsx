@@ -73,8 +73,10 @@ export function SearchProject() {
                     Created on: {new Date(project.createdAt).toLocaleDateString()}
                   </h5>
                   <div className="card-body">
-                    <h5 className="card-title projectName" style={{ paddingBottom: "10px", marginBottom: "0px" }}>{project.name}</h5>
-
+                    <h5 className="card-title projectName" style={{ marginBottom: "5px" }}>{project.name} </h5>
+                    
+                    <span > <b style={{color: "#555",paddingBottom:"1px " }}>( {project.creator?.username} )</b>  </span>
+<br />
            <button onClick={() => navigate(`/viewProject/${project._id}`)}
            className="btn btn-warning viewBtn">View</button>
                     

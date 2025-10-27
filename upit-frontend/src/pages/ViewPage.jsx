@@ -27,7 +27,7 @@ export function ViewPage() {
    
     <div style={{ padding: "40px" }}> 
     <Header/>
-      <h2 style={{display:"flex" ,justifyContent:"center"}}>Project Name &nbsp;{project.name}</h2>
+      <h2 style={{display:"flex" ,justifyContent:"center"}}>Project Name :&nbsp;{project.name}</h2>
       
       <div style={{border:"15px solid silver" }}>
         <div style={{ display: "flex", overflowX: "auto" }}>

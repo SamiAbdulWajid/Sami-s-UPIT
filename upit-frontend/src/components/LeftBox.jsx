@@ -58,8 +58,8 @@ export function LeftBox({ setSelectedProject, selectedProject }) {
 
      const result = await Swal.fire({
       title: "Confirm Deletion",
-      text: `Are you sure you want to delete the account with username "${data.user.username}"?`,
-      icon: "warning",
+      html: `Are you sure you want to delete the account with username "<b> ${data.user.username} </b>" ?`,
+      icon: "warning",  
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",

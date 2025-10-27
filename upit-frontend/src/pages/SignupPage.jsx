@@ -133,7 +133,7 @@ navigate("/signup");
       onClick={() => setShowPassword((prev) => !prev)}
       style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
     >
-      {showPassword ? <i class="fa-solid fa-eye-slash"></i> : <i class="fa-solid fa-eye"></i>}
+      {showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i>}
     </button>
   </div>
   <div className="invalid-feedback">Password is required</div>
