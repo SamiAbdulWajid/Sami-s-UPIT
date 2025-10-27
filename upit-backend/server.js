@@ -60,7 +60,7 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use(cors({
   origin: [
     "http://localhost:5173", // for local development
-    "https://your-frontend.onrender.com" // for deployed frontend
+    "https://sami-s-upit-frontend.onrender.com" // for deployed frontend
   ],
   credentials: true
 }));
