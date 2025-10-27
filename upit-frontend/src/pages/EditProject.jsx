@@ -1,9 +1,5 @@
 
 import Swal from 'sweetalert2';
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,6 +8,7 @@ import { toast } from 'react-toastify';
 export function EditProject() {
   const { _id } = useParams();
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [projectName, setProjectName] = useState("");
   const [projectType, setProjectType] = useState("solo");
@@ -23,7 +20,7 @@ export function EditProject() {
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    fetch(`https://sami-s-upit-backend.onrender.com/projects/${_id}`)
+    fetch(`${API_URL}/projects/${_id}`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         setProjectName(data.name);
@@ -45,7 +42,7 @@ export function EditProject() {
         toast.error("Error fetching project");
         console.error("Error fetching project:", err);
       });
-  }, [_id]);
+  }, [_id, API_URL]);
 
   useEffect(() => {
     const currentUserId = localStorage.getItem("userId");
@@ -62,35 +59,34 @@ export function EditProject() {
     }
   }, [creator]);
 
-
   const handleFileChange = (e) => {
-  const selectedFiles = Array.from(e.target.files);
-  selectedFiles.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const ext = file.name.split('.').pop();
-      let language = "plaintext";
-      if (ext === "js") language = "javascript";
-      else if (ext === "py") language = "python";
-      else if (ext === "java") language = "java";
-      else if (ext === "cpp") language = "cpp";
-      else if (ext === "c") language = "c";
-      else if (ext === "json") language = "json";
-      else if (ext === "html") language = "html";
-      else if (ext === "css") language = "css";
-      else if (ext === "md") language = "markdown";
-      setFiles(prevFiles => [
-        ...prevFiles,
-        {
-          filename: file.name,
-          content: reader.result,
-          language
-        }
-      ]);
-    };
-    reader.readAsText(file);
-  });
-};
+    const selectedFiles = Array.from(e.target.files);
+    selectedFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const ext = file.name.split('.').pop();
+        let language = "plaintext";
+        if (ext === "js") language = "javascript";
+        else if (ext === "py") language = "python";
+        else if (ext === "java") language = "java";
+        else if (ext === "cpp") language = "cpp";
+        else if (ext === "c") language = "c";
+        else if (ext === "json") language = "json";
+        else if (ext === "html") language = "html";
+        else if (ext === "css") language = "css";
+        else if (ext === "md") language = "markdown";
+        setFiles(prevFiles => [
+          ...prevFiles,
+          {
+            filename: file.name,
+            content: reader.result,
+            language
+          }
+        ]);
+      };
+      reader.readAsText(file);
+    });
+  };
 
   const handleProjectTypeChange = (e) => {
     setProjectType(e.target.value);
@@ -115,86 +111,85 @@ export function EditProject() {
     setFiles(prevFiles => prevFiles.filter((_, idx) => idx !== indexToRemove));
   };
 
-
   const handleSave = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!projectName.trim()) return;
+    if (!projectName.trim()) return;
 
-  if (files.length === 0) {
-    toast.error("Upload at least one file or folder.");
-    return;
-  }
-
-  // If projectType is group but participants is empty, convert to solo
-  let finalType = projectType;
-  let finalParticipants = participants;
-  if (projectType === "group" && participants.filter(p => p.trim() !== "").length === 0) {
-    finalType = "solo";
-    finalParticipants = [];
-    toast.info("No participants left, converting project to solo.");
-  }
-
-  const metadata = {
-    name: projectName,
-    type: finalType,
-    visibility,
-    participants: finalParticipants.filter((p) => p.trim() !== ""),
-    files,
-  };
-
-  try {
-    const res = await fetch(`https://sami-s-upit-backend.onrender.com/projects/${_id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(metadata),
-    });
-
-    const data = await res.json().catch(() => ({}));
-
-    if (!res.ok) {
-      const errMsg = data?.message || data?.error || "Failed to update project";
-      toast.error(errMsg);
+    if (files.length === 0) {
+      toast.error("Upload at least one file or folder.");
       return;
     }
 
-    toast.success("Project updated successfully!");
-    navigate("/");
-  } catch (err) {
-    console.error("Error updating project:", err);
-    toast.error("Error updating project");
-  }
-};
-
-const handleDelete = () => {
-  Swal.fire({
-    title: 'Confirm Deletion',
-    html: `Are you sure you want to delete project <b>${projectName}</b>? This action cannot be reversed.`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: "Cancel",
-    reverseButtons: true,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      fetch(`http://localhost:8080/projects/${_id}`, {
-        method: "DELETE",
-        credentials: "include",
-      })
-        .then(() => {
-          toast.success("Project deleted successfully!");
-          navigate("/");
-        })
-        .catch((err) => {
-          toast.error("Error deleting project", err);
-          console.error("Error deleting project:", err)
-        });
+    // If projectType is group but participants is empty, convert to solo
+    let finalType = projectType;
+    let finalParticipants = participants;
+    if (projectType === "group" && participants.filter(p => p.trim() !== "").length === 0) {
+      finalType = "solo";
+      finalParticipants = [];
+      toast.info("No participants left, converting project to solo.");
     }
-  });
-};
+
+    const metadata = {
+      name: projectName,
+      type: finalType,
+      visibility,
+      participants: finalParticipants.filter((p) => p.trim() !== ""),
+      files,
+    };
+
+    try {
+      const res = await fetch(`${API_URL}/projects/${_id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(metadata),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const errMsg = data?.message || data?.error || "Failed to update project";
+        toast.error(errMsg);
+        return;
+      }
+
+      toast.success("Project updated successfully!");
+      navigate("/");
+    } catch (err) {
+      console.error("Error updating project:", err);
+      toast.error("Error updating project");
+    }
+  };
+
+  const handleDelete = () => {
+    Swal.fire({
+      title: 'Confirm Deletion',
+      html: `Are you sure you want to delete project <b>${projectName}</b>? This action cannot be reversed.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`${API_URL}/projects/${_id}`, {
+          method: "DELETE",
+          credentials: "include",
+        })
+          .then(() => {
+            toast.success("Project deleted successfully!");
+            navigate("/");
+          })
+          .catch((err) => {
+            toast.error("Error deleting project");
+            console.error("Error deleting project:", err)
+          });
+      }
+    });
+  };
 
   // Show a loading spinner while determining userRole
   if (userRole === null) return (
@@ -375,55 +370,54 @@ const handleDelete = () => {
           </div>
 
           {/* Participants (only for group) */}
-
-{projectType === "group" && (
-  <div className="col-12">
-    <label className="form-label">Participants</label>
-    <div
-      style={{
-        maxHeight: "180px",
-        overflowY: "auto",
-        border: "1px solid #eee",
-        borderRadius: "6px",
-        padding: "8px",
-        marginBottom: "8px",
-        background: "#fafafa"
-      }}
-    >
-      {participants.map((participant, index) => (
-        <div key={index} className="d-flex mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter participant username"
-            value={participant}
-            onChange={(e) =>
-              handleParticipantChange(index, e.target.value)
-            }
-            required
-          />
-          <button
-            type="button"
-            className="btn btn-danger ms-2"
-            onClick={() => removeParticipant(index)}
-          >
-            -
-          </button>
-          <div className="invalid-feedback">
-            Please enter participant name.
-          </div>
-        </div>
-      ))}
-    </div>
-    <button
-      type="button"
-      className="btn btn-success mt-2"
-      onClick={addParticipant}
-    >
-      + Add Participant
-    </button>
-  </div>
-)}
+          {projectType === "group" && (
+            <div className="col-12">
+              <label className="form-label">Participants</label>
+              <div
+                style={{
+                  maxHeight: "180px",
+                  overflowY: "auto",
+                  border: "1px solid #eee",
+                  borderRadius: "6px",
+                  padding: "8px",
+                  marginBottom: "8px",
+                  background: "#fafafa"
+                }}
+              >
+                {participants.map((participant, index) => (
+                  <div key={index} className="d-flex mb-2">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter participant username"
+                      value={participant}
+                      onChange={(e) =>
+                        handleParticipantChange(index, e.target.value)
+                      }
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-danger ms-2"
+                      onClick={() => removeParticipant(index)}
+                    >
+                      -
+                    </button>
+                    <div className="invalid-feedback">
+                      Please enter participant name.
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="btn btn-success mt-2"
+                onClick={addParticipant}
+              >
+                + Add Participant
+              </button>
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="col-12 d-flex justify-content-between">

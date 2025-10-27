@@ -12,6 +12,7 @@ export function AddProject() {
   const [participants, setParticipants] = useState([""]);
   const [visibility, setVisibility] = useState("private");
   const [files, setFiles] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
@@ -99,7 +100,7 @@ export function AddProject() {
     files.forEach((file) => formData.append("files", file));
 
     try {
-      const res = await axios.post("https://sami-s-upit-backend.onrender.com/projects", formData, {
+      const res = await axios.post(`${API_URL}/projects`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });

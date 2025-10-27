@@ -13,6 +13,7 @@ export function SearchProject() {
   const navigate=useNavigate();
   const [projects, setProjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchProjects(); // load all projects initially
@@ -20,7 +21,7 @@ export function SearchProject() {
 
   const fetchProjects = async (query = "") => {
   try {
-    const res = await axios.get("https://localhost:8080/projects/searchProject", {
+    const res = await axios.get(`${API_URL}/projects/searchProject`, {
       params: { name: query },
     });
     // Always set projects as an array!

@@ -9,9 +9,9 @@ export function ViewPage() {
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-
+const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
-    axios.get(`https://sami-s-upit-backend.onrender.com/projects/${id}`)
+    axios.get(`${API_URL}/projects/${id}`)
       .then(res => {
         setProject(res.data);
         if (res.data.files && res.data.files.length > 0) {

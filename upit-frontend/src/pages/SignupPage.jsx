@@ -13,6 +13,7 @@ export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const forms = document.querySelectorAll(".needs-validation");
     Array.from(forms).forEach((form) => {
@@ -34,7 +35,7 @@ export function SignupPage() {
   const handleonSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post("https://sami-s-upit-backend.onrender.com/users/signup", {
+      const res = await axios.post(`${API_URL}/users/signup`, {
         username,
         email,
         password,

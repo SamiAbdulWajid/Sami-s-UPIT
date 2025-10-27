@@ -12,6 +12,7 @@ export function LoginPage() {
   const [email,setEmail]=useState("");
   const[password,setPassword]=useState("");
 const [showPassword, setShowPassword] = useState(false);
+const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const goToSignup = () => {
     navigate("/signup")
@@ -20,7 +21,7 @@ const [showPassword, setShowPassword] = useState(false);
   const handleSubmit=async (event)=>{
   event.preventDefault();
   try{
-    const res=await axios.post("https://sami-s-upit-backend.onrender.com/users/login",{
+    const res=await axios.post(`${API_URL}/users/login`,{
       username:email,
       password
     },
