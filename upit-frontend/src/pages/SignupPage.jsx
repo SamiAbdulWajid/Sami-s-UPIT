@@ -39,7 +39,7 @@ export function SignupPage() {
         username,
         email,
         password,
-      });
+      },{ withCredentials: true });
 
       toast.success("You’re all set! Welcome to Upit.");
 
