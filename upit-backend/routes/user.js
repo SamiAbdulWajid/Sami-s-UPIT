@@ -39,18 +39,16 @@ router.post("/uploadProfilePic", upload.single("profilePic"), wrapAsync(async (r
 }));
 
 // Create a new User
-router.post("/signup", wrapAsync(async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-        const user = new User({ username, email });
-        const registeredUser = await User.register(user, password);
-        res.status(201).json({ message: "User registered successfully", user: registeredUser });
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
+router.post("/signup", wrapAsync(async (req,res,next) => {
+   const { username, email, password } = req.body;
+  const user = new User({ username, email });
+  const registeredUser = await User.register(user, password);
+
+  // Log the user in after signup to set the session cookie
+  req.login(registeredUser, (err) => {
+    if (err) return next(err);
+    res.status(201).json({ message: "Signup successful", user: registeredUser });
+  }); 
 }));
 
 // Deleting User
