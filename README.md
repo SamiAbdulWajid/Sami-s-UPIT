@@ -2,8 +2,6 @@
 # 🚀 UPIT – Visual Code Collaboration Platform
 
 
-\
-
 ## 📌 Overview
 
 UPIT is a full-stack web application that reimagines version control by replacing command-line workflows with an intuitive visual interface. It simplifies collaboration through drag-and-drop file management aSyeda Maria Fatimand flexible project modes.
